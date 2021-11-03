@@ -1,0 +1,32 @@
+body {
+  background-color: #2a2a2a !important;
+}
+
+#register-card {
+  background-color: #353535 !important;
+  margin: 10%;
+  width: 450px;
+}
+
+.card-header {
+  color: #ffffff;
+}
+
+.card-body {
+  padding: 0px 18px 18px !important;
+}
+
+.form-group {
+  color: #ffffff;
+  margin: 20px 0px;
+}
+
+.form-control {
+  background-color: #424242 !important;
+  color: #ffffff !important;
+  border-color: #0d6efd !important;
+}
+
+#submit {
+  color: #ffffff !important;
+}
