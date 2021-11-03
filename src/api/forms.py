@@ -11,7 +11,7 @@ from safe import check
 
 from hashlib import md5
 
-from api.models import User
+from .models import User
 
 
 class RegistrationForm(FlaskForm):
