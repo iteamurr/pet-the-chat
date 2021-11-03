@@ -11,7 +11,7 @@ def create_chat_message(msg_template):
     if item in emotes:
       with open('api/emotes.json', 'r') as emotes_json:
         emote_src = json.load(emotes_json)[item[1:-1]]
-      message += f'<img src="/static/emotes/{emote_src}" class="user-message-emote">'
+      message += f'<img src="{emote_src}" class="user-message-emote">'
     else:
       message += f'<span class="user-message-item">{item}</span>'
 

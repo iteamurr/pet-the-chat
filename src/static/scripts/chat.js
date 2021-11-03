@@ -47,7 +47,7 @@ $(document).ready(function () {
   }
 
   function leaveChat(chat) {
-    socket.emit('leave', { username: username, chat_link: chat });
+    socket.emit('leave', { username: username, chat_link: chat, username_color: username_color });
   }
 
   function getNewUsernameColor() {
