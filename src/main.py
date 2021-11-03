@@ -32,7 +32,7 @@ from api.tools import create_chat_message
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = config('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL')
 
 db.init_app(app)
 
@@ -159,4 +159,4 @@ def leave(data):
   emit('create_message', new_data, room=data['chat_link'])
 
 if __name__ == '__main__':
-  socketio.run(app)
+  app.run()
