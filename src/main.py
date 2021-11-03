@@ -21,13 +21,13 @@ from flask_socketio import leave_room
 
 from uuid import uuid4
 
-from api.forms import RegistrationForm
-from api.forms import LoginForm
-from api.models import db
-from api.models import User
-from api.models import Room
-from api.models import Chat
-from api.tools import create_chat_message
+from .api.forms import RegistrationForm
+from .api.forms import LoginForm
+from .api.models import db
+from .api.models import User
+from .api.models import Room
+from .api.models import Chat
+from .api.tools import create_chat_message
 
 
 app = Flask(__name__)
