@@ -1,0 +1,20 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+<div class="card mx-auto shadow p-3 mb-5 rounded" id="register-card">
+  <div class="card-header">
+    Log in to Pet The Chat
+  </div>
+  <div class="card-body">
+    <form id="form" action="{{ url_for('login') }}" method="post">
+      {{ render_field(form.username, "Username") }}
+      {{ render_field(form.password, "Password") }}
+      {{ form.submit(class_="btn btn-primary") }}
+      {{ form.csrf_token }}
+    </form>
+  </div>
+</div>
+{% endblock %}

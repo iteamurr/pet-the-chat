@@ -1,0 +1,21 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+<div class="card mx-auto shadow p-3 mb-5 rounded" id="register-card">
+  <div class="card-header">
+    Join Pet The Chat
+  </div>
+  <div class="card-body">
+    <form id="form" action="{{ url_for('register') }}" method="post">
+      {{ render_field(form.username, "Username") }}
+      {{ render_field(form.password, "Password") }}
+      {{ render_field(form.confirm_pswd, "Confirm password") }}
+      {{ form.submit(class_="btn btn-primary") }}
+      {{ form.csrf_token }}
+    </form>
+  </div>
+</div>
+{% endblock %}
