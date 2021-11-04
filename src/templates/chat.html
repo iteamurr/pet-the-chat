@@ -13,30 +13,27 @@
 
 <body>
   <div class="wrapper">
-    <div clas="container-fluid m-0 p-0">
-      <div class="row">
-        <div class="col-sm-3 position-fixed" id="chats">
-          <button type="button" class="btn shadow rounded" id="create-chat" data-bs-toggle="modal"
-            data-bs-target="#modal-create-chat">
-            <p>Create chat</p>
-          </button>
-          {% for chat_link, chat_name in chats.items() %}
-          <div class="select-chat">
-            <p class="chat-name" id="{{ chat_link }}">{{ chat_name }}</p>
-          </div>
-          {% endfor %}
-        </div>
-        <div class="col-sm-7 offset-sm-3" id="main">
-          <div id="chat">
+    <div id="chats">
+      <div class="select-chat" id="create-chat" data-bs-toggle="modal"
+        data-bs-target="#modal-create-chat">
+        <p>Create chat</p>
+      </div>
+      {% for chat_link, chat_name in chats.items() %}
+      <div class="select-chat">
+        <p class="chat-name" id="{{ chat_link }}">{{ chat_name }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div id="main">
+      <div id="chat">
 
-          </div>
-          <div class="input-field">
-            <textarea class="form-control" id="textarea" placeholder="Write a message" rows="1"></textarea>
-            <button class="btn btn-primary" id="send_message" type="button" tabindex="1">Chat</button>
-          </div>
-        </div>
+      </div>
+      <div id="input-field">
+        <textarea class="form-control" id="textarea" placeholder="Write a message" rows="1"></textarea>
+        <button class="btn btn-primary" id="send_message" type="button" tabindex="1">Chat</button>
       </div>
     </div>
+    <div class="btn btn-primary" id="scroll-down">Scroll</div>
     <div class="modal fade" id="modal-create-chat" tabindex="-1" aria-labelledby="modal-create-chat-label"
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
