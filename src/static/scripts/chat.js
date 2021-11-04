@@ -1,5 +1,7 @@
 $(document).ready(function () {
   var socket = io();
+
+  var scroll = 0;
   var chat_link = main_chat_link;
   var username_color = "#9ACD32";
   joinChat(chat_link);
@@ -9,6 +11,7 @@ $(document).ready(function () {
     var message_div = `<div class="message-items">${data['data']}</div>`;
     var user_message = `<div class="shadow" id="user-message">${username_div}${message_div}</div>`;
     $('#chat').append(user_message);
+    scrollChat();
   });
 
   socket.on('new_chat', function (data) {
@@ -18,8 +21,10 @@ $(document).ready(function () {
   });
 
   $('#send_message').on('click', function () {
-    socket.emit('send_message', { msg: $('#textarea').val(), username: username, chat_link: chat_link, username_color: username_color });
-    $('#textarea').val('');
+    if ($.trim($('#textarea').val()).length > 0) {
+      socket.emit('send_message', { msg: $('#textarea').val(), username: username, chat_link: chat_link, username_color: username_color });
+      $('#textarea').val('');
+    }
     return false;
   });
 
@@ -48,6 +53,20 @@ $(document).ready(function () {
 
   function leaveChat(chat) {
     socket.emit('leave', { username: username, chat_link: chat, username_color: username_color });
+  }
+
+  function scrollChat() {
+    var new_scroll = $('#chat').prop('scrollTop');
+    if (new_scroll >= scroll) {
+      $('#chat').children().last()[0].scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+      });
+      scroll = new_scroll;
+    }
+    else {
+      $('#scroll-down').show();
+    }
   }
 
   function getNewUsernameColor() {

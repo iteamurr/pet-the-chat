@@ -18,4 +18,12 @@ $(document).ready(function () {
     if ($('#textarea').val().length === 0)
       $('#textarea').attr('rows', 1);
   });
+
+  $("#scroll-down").on('click', function () {
+    $('#chat').children().last()[0].scrollIntoView({
+      behavior: "smooth",
+      block: "end"
+    });
+    $("#scroll-down").hide();
+  });
 });
