@@ -19,11 +19,24 @@ $(document).ready(function () {
       $('#textarea').attr('rows', 1);
   });
 
-  $("#scroll-down").on('click', function () {
+  $("#chat").on('scroll', function () {
+    if ($('#chat').prop('scrollHeight') - $('#chat').prop('scrollTop') > 1200)
+      $('.scroll-down').toggleClass('scroll-down scroll-down-flex');
+    else
+      $('.scroll-down-flex').toggleClass('scroll-down-flex scroll-down');
+  });
+
+  $(".scroll-down").on('click', function () {
     $('#chat').children().last()[0].scrollIntoView({
       behavior: "smooth",
       block: "end"
     });
-    $("#scroll-down").hide();
+  });
+
+  $('.chats-header-icon').click(function(event) {
+    $('.select-chat').toggleClass('active');
+    $('.chats-menu').toggleClass('active');
+    $('.content-back').toggleClass('active');
+    $('.chats-header-menu').toggleClass('active');
   });
 });

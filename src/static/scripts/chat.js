@@ -64,9 +64,6 @@ $(document).ready(function () {
       });
       scroll = new_scroll;
     }
-    else {
-      $('#scroll-down').show();
-    }
   }
 
   function getNewUsernameColor() {
