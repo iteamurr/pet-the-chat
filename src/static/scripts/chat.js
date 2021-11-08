@@ -30,7 +30,7 @@ $(document).ready(function () {
 
   $('#submit-create-chat').on('click', function () {
     if ($('#new-chat-name').val().length > 0) {
-      socket.emit('create_chat', { chat_name: $('#new-chat-name').val(), amin: username, current_chat: chat_link });
+      socket.emit('create_chat', { chat_name: $('#new-chat-name').val(), admin: username, current_user: socket.id });
     }
     return false;
   });

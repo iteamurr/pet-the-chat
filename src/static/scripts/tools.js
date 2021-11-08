@@ -33,10 +33,23 @@ $(document).ready(function () {
     });
   });
 
-  $('.chats-header-icon').click(function(event) {
+  $('.chats-header-icon').click(function (event) {
     $('.select-chat').toggleClass('active');
     $('.chats-menu').toggleClass('active');
     $('.content-back').toggleClass('active');
     $('.chats-header-menu').toggleClass('active');
   });
+
+  $('#emote-btn').click(function (event) {
+    $('.all-emotes').toggleClass('active');
+  });
+
+  $('.all-emotes').on('click', '.get-emote', function () {
+    text = $(this).children('span').text();
+    if ($('#textarea').val().length > 0)
+      $('#textarea').val($('#textarea').val() + ` ${text} `);
+    else
+      $('#textarea').val(`${text} `)
+  });
+  return false;
 });

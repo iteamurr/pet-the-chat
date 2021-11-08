@@ -20,6 +20,8 @@ from flask_socketio import leave_room
 
 from uuid import uuid4
 
+import json
+
 from .api.forms import RegistrationForm
 from .api.forms import LoginForm
 from .api.models import db
@@ -94,10 +96,14 @@ def chat():
     for chat in chat_links
   }
 
+  with open('/app/src/api/emotes.json', 'r') as emotes_json_file:
+    emotes = json.load(emotes_json_file)
+
   return render_template(
     'chat.html',
     username=current_user.username,
     chats=user_chats,
+    emotes=emotes,
     main_chat=main_chat_link
   )
 
@@ -127,7 +133,7 @@ def create_chat(data):
   db.session.commit()
 
   new_data = {'chat_link': chat_link,'chat_name': data['chat_name'],}
-  emit('new_chat', new_data, room=data['current_chat'])
+  emit('new_chat', new_data, room=data['current_user'])
 
 @socketio.on('join')
 def join(data):

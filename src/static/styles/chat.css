@@ -25,7 +25,7 @@ body {
   position: fixed;
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
+  justify-content: space-between;
   width: 80%;
   height: 100%;
   left: 20%;
@@ -47,12 +47,12 @@ body {
   justify-content: space-between;
   align-items: stretch;
   width: 98%;
-  height: 10%;
+  min-height: 50px;
   margin: 5px 0px 10px;
 }
 
 #textarea {
-  margin-right: 10px;
+  margin: 0px 5px;
   resize: none;
   overflow-x: hidden;
   overflow-y: auto;
@@ -137,7 +137,20 @@ body {
 }
 
 #send_message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 5px;
+  width: 5%;
+  height: 100%;
+  border-radius: .25rem;
+  background-color: #0d6efd;
   color: #ffffff !important;
+}
+#send_message svg {
+  width: 50%;
+  height: 50%;
+  color: #ffffff;
 }
 
 .user-message-emote {
@@ -160,6 +173,70 @@ body {
   background-color: #424242 !important;
   color: #ffffff !important;
   border-color: #0d6efd !important;
+}
+
+.all-emotes {
+  display: none;
+}
+.all-emotes.active {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  bottom: 0;
+  right: 0;
+  margin: 0px 20px 70px 0px;
+  width: 400px;
+  height: 200px;
+  padding: 10px;
+  flex-direction: row;
+  overflow: auto;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #424242;
+  border-radius: .25rem;
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .25);
+}
+
+.get-emote {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 80px;
+  max-height: 60px;
+  margin: 5px;
+  padding: 5px;
+  background-color: #2a2a2a;
+  border-radius: .25rem;
+}
+.get-emote img {
+  width: 28px;
+  height: 28px;
+}
+.get-emote span {
+  font-size: 10px;
+}
+
+#emotes-menu {
+  margin: 0px 5px;
+  width: 5%;
+  height: 100%;
+  border-radius: .25rem;
+  background-color: #0d6efd;
+}
+
+#emote-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+#emote-icon{
+  width: 50%;
+  height: 50%;
+  color: #ffffff;
 }
 
 .content-back {
