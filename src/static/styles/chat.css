@@ -226,6 +226,7 @@ body {
 }
 
 .user-message-emote {
+  display: initial;
   height: 28px;
   width: 28px;
 }
