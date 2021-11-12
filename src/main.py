@@ -143,11 +143,10 @@ def join(data):
   message = f'{data["username"]} has joined the room {room_name}.'
   new_data = {
     'data': message,
-    'username': data['username'],
-    'username_color': data['username_color']
+    'chat_name': room_name
   }
 
-  emit('create_message', new_data, room=data['chat_link'])
+  emit('system_message', new_data, room=data['chat_link'])
 
 @socketio.on('leave')
 def leave(data):
@@ -157,11 +156,10 @@ def leave(data):
   message = f'{data["username"]} has left the room {room_name}.'
   new_data = {
     'data': message,
-    'username': data['username'],
-    'username_color': data['username_color']
+    'chat_name': room_name
   }
 
-  emit('create_message', new_data, room=data['chat_link'])
+  emit('system_message', new_data, room=data['chat_link'])
 
 if __name__ == '__main__':
   app.run()
