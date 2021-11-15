@@ -7,25 +7,18 @@ $(document).ready(function () {
   joinChat(chat_link);
 
   socket.on("create_message", function (data) {
-    var username_div = `<div class="username" style="color: ${data["username_color"]};">${data["username"]}:</div>`;
-    var message_div = `<div class="message-items">${data["data"]}</div>`;
-    var user_message = `<div class="user-message">${username_div}${message_div}</div>`;
-    $(".chat-messages").append(user_message);
+    $(".chat-messages").append(data["message"]);
     scrollChat();
   });
 
   socket.on("system_message", function (data) {
-    var message_div = `<div class="system-items">${data["data"]}</div>`;
-    var system_message = `<div class="system-message">${message_div}</div>`;
-    $(".chat-messages").append(system_message);
+    $(".chat-messages").append(data["message"]);
     scrollChat();
     $(".chat-header-name").children("span").eq(0).text(data["chat_name"]);
   });
 
   socket.on("new_chat", function (data) {
-    var chat_name_p = `<p class="chat-name" id="${data["chat_link"]}">${data["chat_name"]}</p>`;
-    var chat_div = `<div class="select-chat">${chat_name_p}</div>`;
-    $(".chats-content").append(chat_div);
+    $(".chats-content").append(data["chat"]);
     joinChat(data["chat_link"]);
   });
 
