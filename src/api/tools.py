@@ -36,14 +36,14 @@ def get_chat_template_variables(user) -> Dict[str, Any]:
         "username": user.username,
         "chats": user_chats,
         "emotes": emotes,
-        "main_chat": connection_chat_link,
+        "current_chat": connection_chat_link,
     }
     return data
 
 
 def get_emotes() -> Dict[str, str]:
     """Get a dictionary of emotes from a file."""
-    with open("/app/src/api/emotes.json", "r", encoding="utf8") as emotes_json:
+    with open("./api/emotes.json", "r", encoding="utf8") as emotes_json:
         emotes = load(emotes_json)
 
     return emotes
@@ -171,14 +171,12 @@ class Helpers:
         data = {"message": system_message, "chat_name": chat_name}
         return data
 
-    def create_chat(self, data: Dict[str, Any], user) -> Dict[str, Any]:
+    def create_chat(self, chat_name: str, user_id: int) -> Dict[str, Any]:
         """Create a chat and add the user to this chat.
 
-        :param data: Information received from the frontend.
-                     It must contain the chat's name.
-        :param user: Current authorized user.
+        :param chat_name: Name of the chat to create.
+        :param user_id: ID of the current authorized user.
         """
-        chat_name = data["chat_name"]
         chat_link = str(uuid4())
 
         # Create a new chat.
@@ -187,7 +185,7 @@ class Helpers:
         self.db.session.commit()
 
         # Add the user to a new chat.
-        new_room = Room(user_id=user.id, chat_link=chat_link)
+        new_room = Room(user_id=user_id, chat_link=chat_link)
         self.db.session.add(new_room)
         self.db.session.commit()
 
@@ -196,3 +194,23 @@ class Helpers:
         new_chat = self._chat_templ.format(chat_name)
         data = {"chat": new_chat, "chat_link": chat_link}
         return data
+
+    def join_chat(self, chat_link: str, user_id: int) -> bool:
+        """Add a user to the chat, if this chat exists.
+
+        :param chat_link: Link to the chat that the user wants to join.
+        :param user_id: ID of the current authorized user.
+        """
+
+        exists = Room.query.filter_by(chat_link=chat_link).first()
+        is_unavailable = Room.query.filter_by(
+            chat_link=chat_link, user_id=user_id
+        ).first()
+
+        if exists and not is_unavailable:
+            new_room = Room(user_id=user_id, chat_link=chat_link)
+            self.db.session.add(new_room)
+            self.db.session.commit()
+            return True
+
+        return False
