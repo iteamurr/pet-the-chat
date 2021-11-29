@@ -11,6 +11,7 @@ from typing import Dict
 from typing import Optional
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm.exc import NoResultFound
 
 from .forms import RegistrationForm
 from .forms import LoginForm
@@ -49,16 +50,31 @@ def get_emotes() -> Dict[str, str]:
     return emotes
 
 
+def create_connection_chat(db: SQLAlchemy) -> None:
+    """Create the first chat that the user will connect to.
+
+    :param db: Current database.
+    """
+    db.create_all()
+
+    try:
+        Chat.query.get(1).link
+    except (AttributeError, NoResultFound):
+        chat = Chat(name="Connection", link=str(uuid4()))
+        db.session.add(chat)
+        db.session.commit()
+
+
 class FormHandler:
     """This class is responsible for getting information from forms
     and working with it. Through this class there is interaction
     with the database, writing and reading from it.
     """
 
-    def __init__(self, db: "SQLAlchemy") -> None:
+    def __init__(self, db: SQLAlchemy) -> None:
         self.db = db
 
-    def registration_form(self, form: "RegistrationForm") -> None:
+    def registration_form(self, form: RegistrationForm) -> None:
         """Get information from the registration form. Write the user
         to the database and automatically add him to the first chat.
 
@@ -75,13 +91,17 @@ class FormHandler:
 
         # Add a user to his first chat.
         user_id = User.query.filter_by(username=username).first().id
-        connection_chat_link = Chat.query.get(1).link
-        connection_room = Room(user_id=user_id, chat_link=connection_chat_link)
+        connection_chat = Chat.query.get(1)
+        connection_room = Room(
+            chat_id=connection_chat.id,
+            user_id=user_id,
+            chat_link=connection_chat.link,
+        )
         self.db.session.add(connection_room)
         self.db.session.commit()
 
     @staticmethod
-    def login_form(form: "LoginForm") -> "User":
+    def login_form(form: LoginForm) -> User:
         """Get a user, with the name obtained from the form,
         from the database.
 
@@ -109,7 +129,7 @@ class Helpers:
     _chat_templ = '<div class="select-chat">{}</div>'
     _chat_name_templ = '<p class="chat-name" id="{}">{}</p>'
 
-    def __init__(self, db: Optional["SQLAlchemy"] = None) -> None:
+    def __init__(self, db: Optional[SQLAlchemy] = None) -> None:
         self.db = db
 
     def _create_message_content(self, user_message: str) -> str:
@@ -146,7 +166,9 @@ class Helpers:
         """
         msg_content = self._create_message_content(data["msg"])
 
-        username = self._username_templ.format(data["username_color"], data["username"])
+        username = self._username_templ.format(
+            data["username_color"], data["username"]
+        )
         content = self._msg_content_templ.format(msg_content)
         user_message = self._usr_msg_templ.format(username, content)
         message = {"message": user_message}
@@ -179,14 +201,15 @@ class Helpers:
         """
         chat_link = str(uuid4())
 
-        # Create a new chat.
-        new_chat = Chat(name=chat_name, link=chat_link)
-        self.db.session.add(new_chat)
-        self.db.session.commit()
-
         # Add the user to a new chat.
         new_room = Room(user_id=user_id, chat_link=chat_link)
         self.db.session.add(new_room)
+        self.db.session.commit()
+
+        # Create a new chat.
+        new_chat = Chat(name=chat_name, link=chat_link)
+        new_chat.child.append(new_room)
+        self.db.session.add(new_chat)
         self.db.session.commit()
 
         # Create an html chat object.
@@ -208,7 +231,10 @@ class Helpers:
         ).first()
 
         if exists and not is_unavailable:
-            new_room = Room(user_id=user_id, chat_link=chat_link)
+            current_chat_id = Chat.query.filter_by(link=chat_link).first().id
+            new_room = Room(
+                chat_id=current_chat_id, user_id=user_id, chat_link=chat_link
+            )
             self.db.session.add(new_room)
             self.db.session.commit()
             return True

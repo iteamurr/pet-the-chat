@@ -24,6 +24,7 @@ from api.models import User
 from api.tools import FormHandler
 from api.tools import Helpers
 from api.tools import get_chat_template_variables
+from api.tools import create_connection_chat
 
 
 app = Flask(__name__)
@@ -31,6 +32,8 @@ app.config["SECRET_KEY"] = config("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = config("SQLALCHEMY_DATABASE_URI")
 
 db.init_app(app)
+with app.app_context():
+    create_connection_chat(db)
 
 handler = FormHandler(db)
 
