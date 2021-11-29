@@ -57,4 +57,8 @@ $(document).ready(function () {
     $(".create-chat-form").toggleClass("active");
     $(".create-chat-form-content-back").toggleClass("active");
   });
+
+  $(".chat-header-right-menu").on("click", function (event) {
+    $(".chat-settings-menu").toggleClass("active");
+  });
 });

@@ -327,3 +327,31 @@ i {
   font-size: 1.2rem;
   color: #ffffff;
 }
+
+.chat-settings-menu {
+  display: none;
+}
+.chat-settings-menu.active {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  top: 6%;
+  right: 0;
+  width: 150px;
+  height: 100px;
+  padding: 15px 0px;
+  color: #ffffff;
+  background-color: var(--main-color);
+  box-shadow: 0 0.5rem 1rem var(--shadow);
+}
+
+.chat-settings-menu-view-info,
+.chat-settings-menu-leave-chat {
+  padding-left: 20px;
+}
+
+.chat-settings-menu-view-info:hover,
+.chat-settings-menu-leave-chat:hover {
+  background-color: var(--additional-color);
+}
