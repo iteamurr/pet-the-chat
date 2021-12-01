@@ -86,11 +86,24 @@
       </div>
     </div>
     <div class="chat-settings-menu">
-      <div class="chat-settings-menu-view-info">
-        <p>View chat info</p>
+      <div class="chat-settings-menu-get-link">
+        <p>Get chat link</p>
       </div>
       <div class="chat-settings-menu-leave-chat">
         <p>Leave chat</p>
+      </div>
+    </div>
+    <div class="copy-chat-link-menu-content-back">
+      <div class="copy-chat-link-menu">
+        <div class="copy-chat-link-menu-header">
+          <span>Copy link</span>
+          <div class="chat-settings-menu-get-link">
+            <i class="bi bi-x-lg"></i>
+          </div>
+        </div>
+        <div class="copy-chat-link-menu-content">
+          <input type="text" id="input-copy-link" value="">
+        </div>
       </div>
     </div>
   </div>
@@ -102,6 +115,7 @@
   <script type="text/javascript">
     const username = `{{ username }}`;
     const current_chat_link = `{{ current_chat }}`;
+    const current_url = `{{ url }}`;
   </script>
   <script type="text/javascript" src="{{ url_for('static', filename='scripts/chat.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='scripts/tools.js') }}"></script>
