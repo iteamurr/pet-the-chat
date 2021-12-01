@@ -10,6 +10,7 @@ from typing import Any
 from typing import Dict
 from typing import Optional
 
+from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -38,6 +39,7 @@ def get_chat_template_variables(user) -> Dict[str, Any]:
         "chats": user_chats,
         "emotes": emotes,
         "current_chat": connection_chat_link,
+        "url": config("URL"),
     }
     return data
 

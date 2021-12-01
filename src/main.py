@@ -85,7 +85,7 @@ def chat():
     return render_template("chat.html", **variables)
 
 
-@app.route("/chat/join/<chat_link>")
+@app.route("/join/<chat_link>")
 def join_chat(chat_link):
     hlp = Helpers(db)
     was_joined = hlp.join_chat(chat_link, current_user.id)
