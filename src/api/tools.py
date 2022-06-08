@@ -46,7 +46,7 @@ def get_chat_template_variables(user) -> Dict[str, Any]:
 
 def get_emotes() -> Dict[str, str]:
     """Get a dictionary of emotes from a file."""
-    with open("./api/emotes.json", "r", encoding="utf8") as emotes_json:
+    with open("/app/src/api/emotes.json", "r", encoding="utf8") as emotes_json:
         emotes = load(emotes_json)
 
     return emotes
