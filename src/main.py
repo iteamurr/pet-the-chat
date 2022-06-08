@@ -17,14 +17,14 @@ from flask_socketio import emit
 from flask_socketio import join_room
 from flask_socketio import leave_room
 
-from api.forms import RegistrationForm
-from api.forms import LoginForm
-from api.models import db
-from api.models import User
-from api.tools import FormHandler
-from api.tools import Helpers
-from api.tools import get_chat_template_variables
-from api.tools import create_connection_chat
+from .api.forms import RegistrationForm
+from .api.forms import LoginForm
+from .api.models import db
+from .api.models import User
+from .api.tools import FormHandler
+from .api.tools import Helpers
+from .api.tools import get_chat_template_variables
+from .api.tools import create_connection_chat
 
 
 app = Flask(__name__)
