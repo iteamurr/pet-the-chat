@@ -337,7 +337,7 @@ i {
   top: 6%;
   right: 0;
   width: 150px;
-  height: 100px;
+  height: 50px;
   padding: 15px 0px;
   color: #ffffff;
   background-color: var(--main-color);
@@ -345,13 +345,11 @@ i {
   z-index: 2;
 }
 
-.chat-settings-menu-get-link,
-.chat-settings-menu-leave-chat {
+.chat-settings-menu-get-link {
   padding-left: 20px;
 }
 
-.chat-settings-menu-get-link:hover,
-.chat-settings-menu-leave-chat:hover {
+.chat-settings-menu-get-link:hover {
   background-color: var(--additional-color);
 }
 

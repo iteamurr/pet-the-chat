@@ -61,7 +61,7 @@ def create_connection_chat(db: SQLAlchemy) -> None:
 
     try:
         Chat.query.get(1).link
-    except (AttributeError, NoResultFound):
+    except AttributeError:
         chat = Chat(name="Connection", link=str(uuid4()))
         db.session.add(chat)
         db.session.commit()
