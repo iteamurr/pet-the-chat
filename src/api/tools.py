@@ -10,7 +10,9 @@ from typing import Any
 from typing import Dict
 from typing import Optional
 
+from decouple import config
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm.exc import NoResultFound
 
 from .forms import RegistrationForm
 from .forms import LoginForm
@@ -36,17 +38,33 @@ def get_chat_template_variables(user) -> Dict[str, Any]:
         "username": user.username,
         "chats": user_chats,
         "emotes": emotes,
-        "main_chat": connection_chat_link,
+        "current_chat": connection_chat_link,
+        "url": config("URL"),
     }
     return data
 
 
 def get_emotes() -> Dict[str, str]:
     """Get a dictionary of emotes from a file."""
-    with open("/app/src/api/emotes.json", "r", encoding="utf8") as emotes_json:
+    with open("./api/emotes.json", "r", encoding="utf8") as emotes_json:
         emotes = load(emotes_json)
 
     return emotes
+
+
+def create_connection_chat(db: SQLAlchemy) -> None:
+    """Create the first chat that the user will connect to.
+
+    :param db: Current database.
+    """
+    db.create_all()
+
+    try:
+        Chat.query.get(1).link
+    except AttributeError:
+        chat = Chat(name="Connection", link=str(uuid4()))
+        db.session.add(chat)
+        db.session.commit()
 
 
 class FormHandler:
@@ -55,10 +73,10 @@ class FormHandler:
     with the database, writing and reading from it.
     """
 
-    def __init__(self, db: "SQLAlchemy") -> None:
+    def __init__(self, db: SQLAlchemy) -> None:
         self.db = db
 
-    def registration_form(self, form: "RegistrationForm") -> None:
+    def registration_form(self, form: RegistrationForm) -> None:
         """Get information from the registration form. Write the user
         to the database and automatically add him to the first chat.
 
@@ -75,13 +93,17 @@ class FormHandler:
 
         # Add a user to his first chat.
         user_id = User.query.filter_by(username=username).first().id
-        connection_chat_link = Chat.query.get(1).link
-        connection_room = Room(user_id=user_id, chat_link=connection_chat_link)
+        connection_chat = Chat.query.get(1)
+        connection_room = Room(
+            chat_id=connection_chat.id,
+            user_id=user_id,
+            chat_link=connection_chat.link,
+        )
         self.db.session.add(connection_room)
         self.db.session.commit()
 
     @staticmethod
-    def login_form(form: "LoginForm") -> "User":
+    def login_form(form: LoginForm) -> User:
         """Get a user, with the name obtained from the form,
         from the database.
 
@@ -109,7 +131,7 @@ class Helpers:
     _chat_templ = '<div class="select-chat">{}</div>'
     _chat_name_templ = '<p class="chat-name" id="{}">{}</p>'
 
-    def __init__(self, db: Optional["SQLAlchemy"] = None) -> None:
+    def __init__(self, db: Optional[SQLAlchemy] = None) -> None:
         self.db = db
 
     def _create_message_content(self, user_message: str) -> str:
@@ -146,7 +168,9 @@ class Helpers:
         """
         msg_content = self._create_message_content(data["msg"])
 
-        username = self._username_templ.format(data["username_color"], data["username"])
+        username = self._username_templ.format(
+            data["username_color"], data["username"]
+        )
         content = self._msg_content_templ.format(msg_content)
         user_message = self._usr_msg_templ.format(username, content)
         message = {"message": user_message}
@@ -171,24 +195,23 @@ class Helpers:
         data = {"message": system_message, "chat_name": chat_name}
         return data
 
-    def create_chat(self, data: Dict[str, Any], user) -> Dict[str, Any]:
+    def create_chat(self, chat_name: str, user_id: int) -> Dict[str, Any]:
         """Create a chat and add the user to this chat.
 
-        :param data: Information received from the frontend.
-                     It must contain the chat's name.
-        :param user: Current authorized user.
+        :param chat_name: Name of the chat to create.
+        :param user_id: ID of the current authorized user.
         """
-        chat_name = data["chat_name"]
         chat_link = str(uuid4())
+
+        # Add the user to a new chat.
+        new_room = Room(user_id=user_id, chat_link=chat_link)
+        self.db.session.add(new_room)
+        self.db.session.commit()
 
         # Create a new chat.
         new_chat = Chat(name=chat_name, link=chat_link)
+        new_chat.child.append(new_room)
         self.db.session.add(new_chat)
-        self.db.session.commit()
-
-        # Add the user to a new chat.
-        new_room = Room(user_id=user.id, chat_link=chat_link)
-        self.db.session.add(new_room)
         self.db.session.commit()
 
         # Create an html chat object.
@@ -196,3 +219,26 @@ class Helpers:
         new_chat = self._chat_templ.format(chat_name)
         data = {"chat": new_chat, "chat_link": chat_link}
         return data
+
+    def join_chat(self, chat_link: str, user_id: int) -> bool:
+        """Add a user to the chat, if this chat exists.
+
+        :param chat_link: Link to the chat that the user wants to join.
+        :param user_id: ID of the current authorized user.
+        """
+
+        exists = Room.query.filter_by(chat_link=chat_link).first()
+        is_unavailable = Room.query.filter_by(
+            chat_link=chat_link, user_id=user_id
+        ).first()
+
+        if exists and not is_unavailable:
+            current_chat_id = Chat.query.filter_by(link=chat_link).first().id
+            new_room = Room(
+                chat_id=current_chat_id, user_id=user_id, chat_link=chat_link
+            )
+            self.db.session.add(new_room)
+            self.db.session.commit()
+            return True
+
+        return False

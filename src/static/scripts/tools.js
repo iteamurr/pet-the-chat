@@ -57,4 +57,15 @@ $(document).ready(function () {
     $(".create-chat-form").toggleClass("active");
     $(".create-chat-form-content-back").toggleClass("active");
   });
+
+  $(".chat-header-right-menu").on("click", function (event) {
+    $(".chat-settings-menu").toggleClass("active");
+  });
+
+  $(".chat-settings-menu-get-link").on("click", function (event) {
+    $(".copy-chat-link-menu-content-back").toggleClass("active");
+    $(".copy-chat-link-menu").toggleClass("active");
+    $(".chat-settings-menu").removeClass("active");
+    $("#input-copy-link").val(`${current_url}join/${chat_link}`);
+  });
 });

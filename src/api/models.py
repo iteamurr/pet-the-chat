@@ -3,6 +3,7 @@
 """
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 
 
@@ -25,6 +26,9 @@ class Room(db.Model):
     __tablename__ = "rooms"
 
     id = db.Column(db.Integer, primary_key=True)
+    chat_id = db.Column(
+        db.Integer, db.ForeignKey("chats.id", ondelete="CASCADE")
+    )
     user_id = db.Column(db.Integer, nullable=False)
     chat_link = db.Column(db.String(50), nullable=False)
 
@@ -37,3 +41,4 @@ class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(70), nullable=False)
     link = db.Column(db.String(50), unique=True, nullable=False)
+    child = relationship(Room, backref="chat", passive_deletes=True)

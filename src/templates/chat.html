@@ -85,6 +85,24 @@
         </div>
       </div>
     </div>
+    <div class="chat-settings-menu">
+      <div class="chat-settings-menu-get-link">
+        <p>Get chat link</p>
+      </div>
+    </div>
+    <div class="copy-chat-link-menu-content-back">
+      <div class="copy-chat-link-menu">
+        <div class="copy-chat-link-menu-header">
+          <span>Copy link</span>
+          <div class="chat-settings-menu-get-link">
+            <i class="bi bi-x-lg"></i>
+          </div>
+        </div>
+        <div class="copy-chat-link-menu-content">
+          <input type="text" id="input-copy-link" value="">
+        </div>
+      </div>
+    </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
     integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
@@ -93,7 +111,8 @@
     integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" crossorigin="anonymous"></script>
   <script type="text/javascript">
     const username = `{{ username }}`;
-    const main_chat_link = `{{ main_chat }}`;
+    const current_chat_link = `{{ current_chat }}`;
+    const current_url = `{{ url }}`;
   </script>
   <script type="text/javascript" src="{{ url_for('static', filename='scripts/chat.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='scripts/tools.js') }}"></script>
