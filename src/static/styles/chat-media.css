@@ -1,7 +1,7 @@
 @media (max-width: 992px) {
   .chats {
     width: 6%;
-    z-index: 3;
+    z-index: 4;
   }
   .chats.active {
     width: 30%;
@@ -27,7 +27,7 @@
   }
   .select-chat.active {
     display: block;
-    z-index: 4;
+    z-index: 5;
   }
 
   .chats-header-icon span {
@@ -46,7 +46,7 @@
     top: 0;
     background-color: var(--main-color);
     opacity: 0.8;
-    z-index: 2;
+    z-index: 3;
   }
 }
 
@@ -86,6 +86,10 @@
   .chat-content {
     height: 91%;
   }
+
+  .chat-settings-menu.active {
+    top: 9%;
+  }
 }
 
 @media (max-height: 518px){
@@ -97,5 +101,9 @@
   .chats-content,
   .chat-content {
     height: 87%;
+  }
+
+  .chat-settings-menu.active {
+    top: 13%;
   }
 }

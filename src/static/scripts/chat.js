@@ -1,9 +1,9 @@
+var chat_link = current_chat_link;
+var scroll = 0;
+var username_color = "#9ACD32";
+
 $(document).ready(function () {
   var socket = io();
-
-  var scroll = 0;
-  var chat_link = main_chat_link;
-  var username_color = "#9ACD32";
   joinChat(chat_link);
 
   socket.on("create_message", function (data) {
